@@ -26,7 +26,7 @@ for filename in glob.glob("../stop-images/train/negative/*"):
 X = IM_ARRAY[1:, :]
 y = y[1:, :]
 initial_theta = np.c_[0, [np.zeros_like(X[0:1,:]).flatten()] ].flatten()
-lam =1.0
+lam =1.5
 
 print "X = ", X.shape
 print "y = ", y.shape
