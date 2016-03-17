@@ -15,7 +15,6 @@ def costFunction(theta, X, y, lam):
     J = ((1.0/m) * (firstPartOfCost - secondPartOfCost)) + regularizationTerm
     return J[0]
 
-
 def gradients(theta, X, y, lam):
     X = np.c_[np.ones(X.shape[0]), X]
     m = y.shape[0]
