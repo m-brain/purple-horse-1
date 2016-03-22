@@ -26,7 +26,7 @@ for filename in glob.glob("../stop-images/train/negative/*"):
 X = IM_ARRAY[1:, :]
 y = y[1:, :]
 initial_theta = np.c_[0, [np.zeros_like(X[0:1,:]).flatten()] ].flatten()
-lam =1.5
+lam = 10.0
 
 print "X = ", X.shape
 print "y = ", y.shape
@@ -43,6 +43,6 @@ print "Optimizing..."
 optim_theta = fmin_bfgs(costFunctionWrapper, initial_theta, fprime=gradientsWrapper)
 
 tstamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H-%M-%S')
-
-with open("optimized_thetas/optim_theta_" + tstamp + ".pkl", 'wb') as out:
+tstamplam = tstamp + "_l" + str(lam)
+with open("optimized_thetas/optim_theta_" + tstamplam + ".pkl", 'wb') as out:
     pickle.dump(optim_theta, out, pickle.HIGHEST_PROTOCOL)
