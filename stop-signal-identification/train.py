@@ -51,6 +51,6 @@ print "Optimizing..."
 optim_theta = fmin_bfgs(costFunctionWrapper, initial_theta, fprime=gradientsWrapper)
 
 tstamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H-%M-%S')
-
-with open("optimized_thetas/optim_theta_" + tstamp + ".pkl", 'wb') as out:
+tstamplam = tstamp + "_l" + str(lam)
+with open("optimized_thetas/optim_theta_" + tstamplam + ".pkl", 'wb') as out:
     pickle.dump(optim_theta, out, pickle.HIGHEST_PROTOCOL)
