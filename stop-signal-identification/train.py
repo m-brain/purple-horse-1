@@ -5,6 +5,8 @@ import glob
 import cPickle as pickle
 import time
 import datetime
+import sys
+
 
 IM_DIMEN = (75, 75)
 y = np.array([[0]])
@@ -26,7 +28,13 @@ for filename in glob.glob("../stop-images/train/negative/*"):
 X = IM_ARRAY[1:, :]
 y = y[1:, :]
 initial_theta = np.c_[0, [np.zeros_like(X[0:1,:]).flatten()] ].flatten()
-lam =1.5
+lam =1.0
+
+try:
+    lam = float(sys.argv[1])
+except(NameError, IndexError):
+    print "No lambda provided"
+    exit()
 
 print "X = ", X.shape
 print "y = ", y.shape
