@@ -6,20 +6,25 @@ import time
 import datetime
 import sys
 
+print sys.argv[1]
+
+IM_DIMEN = (75, 75)
+imarray = cv2.imread(sys.argv[1], cv2.IMREAD_GRAYSCALE)
+imarray = cv2.resize(imarray, IM_DIMEN)
+
+
 thetas = None
-with open("optimized_thetas/optim_theta_2016-04-12_00-07-02_l1e-07.pkl", 'rb') as inp:
+with open("optimized_thetas/optim_theta_2016-04-12_00-56-30_l1.0.pkl", 'rb') as inp:
     thetas = pickle.load(inp)
 
-#x = np.array([[1,2,3,4,5,6]])    
-#x = np.array([[3,2,3,4,5,6]])    
-#x = np.array([[0,0]])
-
-input_layer_size = x.shape[1]
-hidden_layer_size = 1
+x = imarray.flatten()
+input_layer_size = x.shape[0]
+hidden_layer_size = 50
 num_labels = 1
-x = np.c_[[1], [x.flatten()]].flatten()
 
-theta1_params = thetas[0: (hidden_layer_size * (input_layer_size + 1))] 
+x = np.c_[[1], [imarray.flatten()]].flatten()
+
+theta1_params = thetas[0: (hidden_layer_size * (input_layer_size + 1))]
 theta2_params = thetas[(hidden_layer_size * (input_layer_size + 1)):] 
 
 theta_1 = theta1_params.reshape(hidden_layer_size, input_layer_size + 1)
