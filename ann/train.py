@@ -1,6 +1,7 @@
 from cost_function import *
 from scipy.optimize import fmin_bfgs
 from scipy.optimize import fmin_cg
+from scipy.optimize import fmin_l_bfgs_b
 import cv2
 import glob
 import cPickle as pickle
@@ -59,8 +60,12 @@ print "hidden_layer_size = ", hidden_layer_size
 
 
 print "Optimizing..."
+(optim_theta,fval,d) = fmin_l_bfgs_b(costFunctionWrapper, initial_theta, fprime=gradientsWrapper)
+print "Value of func at the minimum = ", fval
+print d
+
 #optim_theta = fmin_bfgs(costFunctionWrapper, initial_theta, fprime=gradientsWrapper)
-optim_theta = fmin_cg(costFunctionWrapper, initial_theta, fprime=gradientsWrapper)
+#optim_theta = fmin_cg(costFunctionWrapper, initial_theta, fprime=gradientsWrapper)
 
 tstamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H-%M-%S')
 tstamplam = tstamp + "_l" + str(lam) + "_h" + str(hidden_layer_size)

@@ -14,7 +14,7 @@ imarray = cv2.resize(imarray, IM_DIMEN)
 
 
 thetas = None
-with open("optimized_thetas/optim_theta_2016-04-12_12-37-53_l1.0_h1.pkl", 'rb') as inp:
+with open("optimized_thetas/optim_theta_2016-04-12_18-09-38_l10.0_h50.pkl", 'rb') as inp:
     thetas = pickle.load(inp)
 
 x = imarray.flatten()
