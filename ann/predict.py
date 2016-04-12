@@ -9,18 +9,25 @@ import sys
 print sys.argv[1]
 
 IM_DIMEN = (75, 75)
-imarray = cv2.imread(sys.argv[1], cv2.IMREAD_GRAYSCALE)
+imarray = cv2.imread(sys.argv[2], cv2.IMREAD_GRAYSCALE)
 imarray = cv2.resize(imarray, IM_DIMEN)
 
 
 thetas = None
-with open("optimized_thetas/optim_theta_2016-04-12_00-56-30_l1.0.pkl", 'rb') as inp:
+with open("optimized_thetas/optim_theta_2016-04-12_12-37-53_l1.0_h1.pkl", 'rb') as inp:
     thetas = pickle.load(inp)
 
 x = imarray.flatten()
 input_layer_size = x.shape[0]
 hidden_layer_size = 50
 num_labels = 1
+
+try:
+    hidden_layer_size = int(sys.argv[1])
+except(NameError, IndexError):
+    print "Provide number of hidden layer nodes"
+    exit()
+
 
 x = np.c_[[1], [imarray.flatten()]].flatten()
 
