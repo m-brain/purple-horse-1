@@ -1,39 +1,36 @@
+import sys
+
+sys.path.append('../')
+
 from cost_function import *
 from scipy.optimize import fmin_bfgs
 from scipy.optimize import fmin_cg
 from scipy.optimize import fmin_l_bfgs_b
+from batch_gradient_descent import fmin_gradient_descent
 import cv2
 import glob
 import cPickle as pickle
 import time
 import datetime
-import sys
+import json
+from mnist import MNIST
 
-IM_DIMEN = (75, 75)
-y = np.array([[0]])
-IM_ARRAY = np.array([np.zeros(IM_DIMEN[0] * IM_DIMEN[1])])
+print "Loading mnsit data..."
+mndata = MNIST('../../../mnist-data/')
+(imgs, labels) =  mndata.load_training()
 
-print "Loading images to array..."
-for filename in glob.glob("../stop-images/train/positive/*"):
-    imarray = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
-    imarray = cv2.resize(imarray, IM_DIMEN)
-    IM_ARRAY = np.r_[IM_ARRAY, [imarray.flatten()]]
-    y = np.r_[y, [[1]]]
+IM_DIMEN = (28, 28)
+y = None
+X = None
 
-for filename in glob.glob("../stop-images/train/negative/*"):
-    imarray = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
-    imarray = cv2.resize(imarray, IM_DIMEN)
-    IM_ARRAY = np.r_[IM_ARRAY, [imarray.flatten()]]
-    y = np.r_[y, [[0]]]
-
-X = IM_ARRAY[1:, :]
-y = y[1:, :]
-
+X = np.array(imgs)
 lam = 1.0
-
 input_layer_size = X.shape[1]
 hidden_layer_size = 50
-num_labels = 1
+num_labels = 10
+
+id_mat = np.eye(num_labels)
+y = id_mat[labels, :]
 
 try:
     lam = float(sys.argv[1])
@@ -60,16 +57,17 @@ print "hidden_layer_size = ", hidden_layer_size
 
 
 print "Optimizing..."
-(optim_theta,fval,d) = fmin_l_bfgs_b(costFunctionWrapper, initial_theta, fprime=gradientsWrapper)
+(optim_theta, fval, d) = fmin_l_bfgs_b(costFunctionWrapper, initial_theta, fprime=gradientsWrapper)
 print "Value of func at the minimum = ", fval
 print d
 
 #optim_theta = fmin_bfgs(costFunctionWrapper, initial_theta, fprime=gradientsWrapper)
 #optim_theta = fmin_cg(costFunctionWrapper, initial_theta, fprime=gradientsWrapper)
+#fmin_gradient_descent(costFunctionWrapper, gradientsWrapper, initial_theta)
 
 model = {'hs': hidden_layer_size, 'optim_theta': optim_theta, 'lam': lam}
 
 tstamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H-%M-%S')
 tstamplam = tstamp + "_l" + str(lam) + "_h" + str(hidden_layer_size)
-with open("optimized_thetas/model_" + tstamplam + ".pkl", 'wb') as out:
+with open("optimized_thetas/model_mnist_" + tstamplam + ".pkl", 'wb') as out:
     pickle.dump(model, out, pickle.HIGHEST_PROTOCOL)

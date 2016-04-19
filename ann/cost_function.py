@@ -16,15 +16,16 @@ def costFunction(nn_params, input_layer_size, hidden_layer_size, num_labels, X, 
 
     Z3 = np.c_[np.ones(A2.shape[0]), A2].dot(theta_2.T)
     A3 = HX = sigmoid(Z3)
-
-    firstPartOfCost = -( (y.T).dot(np.log(HX)))
-    secondPartOfCost = ((1.0 - y).T).dot(np.log(1.0-HX))
+    
+    firstPartOfCost = -( (y) * np.log(HX) )
+    secondPartOfCost = ((1.0 - y) * np.log(1.0-HX))
 
     allThetas = np.append(theta_1.flatten()[1:], theta_2.flatten()[1:])
     regularizationTerm = (lam/(2.0 * m)) * np.sum( np.power(allThetas, 2)) 
+    
+    J = ((1.0/m) * np.sum(np.sum(firstPartOfCost - secondPartOfCost)) ) + regularizationTerm
 
-    J = ((1.0/m) * (firstPartOfCost - secondPartOfCost)) + regularizationTerm
-    return J[0]
+    return J
 
     
 def gradients(nn_params, input_layer_size, hidden_layer_size, num_labels, X, y, lam):
