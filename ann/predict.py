@@ -1,17 +1,17 @@
 from cost_function import *
-import cv2
 import glob
 import cPickle as pickle
 import time
 import datetime
 import sys
 import os
+import scipy.misc
 
 print sys.argv[1]
 
 IM_DIMEN = (75, 75)
-imarray = cv2.imread(sys.argv[1], cv2.IMREAD_GRAYSCALE)
-imarray = cv2.resize(imarray, IM_DIMEN)
+image_array = scipy.misc.imread(sys.argv[1], flatten=True)
+imarray = scipy.misc.imresize(image_array, IM_DIMEN)
 
 model_file = ""
 
