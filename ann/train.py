@@ -2,12 +2,12 @@ from cost_function import *
 from scipy.optimize import fmin_bfgs
 from scipy.optimize import fmin_cg
 from scipy.optimize import fmin_l_bfgs_b
-import cv2
 import glob
 import cPickle as pickle
 import time
 import datetime
 import sys
+import scipy.misc
 
 IM_DIMEN = (75, 75)
 y = np.array([[0]])
@@ -15,14 +15,14 @@ IM_ARRAY = np.array([np.zeros(IM_DIMEN[0] * IM_DIMEN[1])])
 
 print "Loading images to array..."
 for filename in glob.glob("../stop-images/train/positive/*"):
-    imarray = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
-    imarray = cv2.resize(imarray, IM_DIMEN)
+    image_array = scipy.misc.imread(filename, flatten=True)
+    imarray = scipy.misc.imresize(image_array, IM_DIMEN)
     IM_ARRAY = np.r_[IM_ARRAY, [imarray.flatten()]]
     y = np.r_[y, [[1]]]
 
 for filename in glob.glob("../stop-images/train/negative/*"):
-    imarray = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
-    imarray = cv2.resize(imarray, IM_DIMEN)
+    image_array = scipy.misc.imread(filename, flatten=True)
+    imarray = scipy.misc.imresize(image_array, IM_DIMEN)
     IM_ARRAY = np.r_[IM_ARRAY, [imarray.flatten()]]
     y = np.r_[y, [[0]]]
 
